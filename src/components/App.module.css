@@ -1,0 +1,22 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.listContainer {
+  height: calc(100vh - 150px);
+  overflow-y: auto;
+}
+
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
