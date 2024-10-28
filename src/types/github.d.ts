@@ -7,6 +7,5 @@ export type Repo = {
   html_url: string;
 };
 
-export type Order = "asc" | "desc";
-export type Sort = "stars" | "forks" | "updated" 
-
+export type Order = 'asc' | 'desc';
+export type Sort = 'stars' | 'forks' | 'updated';

@@ -1,6 +1,6 @@
-import { makeAutoObservable, runInAction } from "mobx";
-import type { Repo, Sort, Order } from "../types/github";
-import { searchRepositories } from "../api/githubApi";
+import { makeAutoObservable, runInAction } from 'mobx';
+import type { Repo, Sort, Order } from '../types/github';
+import { searchRepositories } from '../api/githubApi';
 
 class RepoStore {
   repos: Repo[] = [];
@@ -18,18 +18,13 @@ class RepoStore {
     this.isLastPage = false;
 
     try {
-      const data = await searchRepositories(
-        query,
-        sort,
-        order,
-        this.currentPage,
-      );
+      const data = await searchRepositories(query, sort, order, this.currentPage);
       runInAction(() => {
         this.repos = data;
         this.isLastPage = data.length === 0;
       });
     } catch (err) {
-      console.error("Failed to load repos", err);
+      console.error('Failed to load repos', err);
     } finally {
       runInAction(() => {
         this.isLoading = false;
@@ -44,18 +39,13 @@ class RepoStore {
     this.currentPage += 1;
 
     try {
-      const data = await searchRepositories(
-        query,
-        sort,
-        order,
-        this.currentPage,
-      );
+      const data = await searchRepositories(query, sort, order, this.currentPage);
       runInAction(() => {
         this.repos = [...this.repos, ...data];
         this.isLastPage = data.length === 0;
       });
     } catch (err) {
-      console.error("Failed to load more repos", err);
+      console.error('Failed to load more repos', err);
     } finally {
       runInAction(() => {
         this.isLoading = false;
@@ -64,14 +54,13 @@ class RepoStore {
   };
 
   editRepo = (id: number, newName: string) => {
-    const ind = this.repos.findIndex((repo) => repo.id === id);
-    if (ind !== -1) {
-      this.repos[ind] = { ...this.repos[ind], name: newName };
-    }
+    runInAction(() => {
+      this.repos = this.repos.map(repo => (repo.id === id ? { ...repo, name: newName } : repo));
+    });
   };
 
   deleteRepo = (id: number) => {
-    this.repos = this.repos.filter((repo) => repo.id !== id);
+    this.repos = this.repos.filter(repo => repo.id !== id);
   };
 
   resetRepos = () => {
