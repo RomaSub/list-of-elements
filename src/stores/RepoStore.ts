@@ -7,18 +7,33 @@ class RepoStore {
   isLoading = false;
   currentPage = 1;
   isLastPage = false;
+  query = 'rust';
+  sort: Sort = 'stars';
+  order: Order = 'desc';
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  loadInitialRepos = async (query: string, sort: Sort, order: Order) => {
+  setQuery = (query: string) => {
+    this.query = query;
+  };
+
+  setSort = (sort: Sort) => {
+    this.sort = sort;
+  };
+
+  setOrder = (order: Order) => {
+    this.order = order;
+  };
+
+  loadInitialRepos = async () => {
     this.isLoading = true;
     this.currentPage = 1;
     this.isLastPage = false;
 
     try {
-      const data = await searchRepositories(query, sort, order, this.currentPage);
+      const data = await searchRepositories(this.query, this.sort, this.order, this.currentPage);
       runInAction(() => {
         this.repos = data;
         this.isLastPage = data.length === 0;
@@ -32,14 +47,14 @@ class RepoStore {
     }
   };
 
-  loadMoreRepos = async (query: string, sort: Sort, order: Order) => {
+  loadMoreRepos = async () => {
     if (this.isLoading || this.isLastPage) return;
 
     this.isLoading = true;
     this.currentPage += 1;
 
     try {
-      const data = await searchRepositories(query, sort, order, this.currentPage);
+      const data = await searchRepositories(this.query, this.sort, this.order, this.currentPage);
       runInAction(() => {
         this.repos = [...this.repos, ...data];
         this.isLastPage = data.length === 0;

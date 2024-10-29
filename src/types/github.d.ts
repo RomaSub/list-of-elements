@@ -5,6 +5,9 @@ export type Repo = {
   stargazers_count: number;
   language: string;
   html_url: string;
+  owner: {
+    avatar_url: string
+  }
 };
 
 export type Order = 'asc' | 'desc';

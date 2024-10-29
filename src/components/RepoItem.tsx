@@ -1,10 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import type { Repo } from '../types/github';
-import { Button, Input, List } from 'antd';
-import { useState } from 'react';
+import { Avatar, Button, Input, List } from 'antd';
+import {  useState } from 'react';
 import { reposStore } from '../stores/RepoStore';
+import { useTranslation } from 'react-i18next';
 
 export const RepoItem = observer(({ repo }: { repo: Repo }) => {
+  const {t} = useTranslation()
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(repo.name);
 
@@ -16,10 +18,11 @@ export const RepoItem = observer(({ repo }: { repo: Repo }) => {
   return (
     <List.Item
       actions={[
-        isEditing ? <Button onClick={handleSave}>Save</Button> : <Button onClick={() => setIsEditing(true)}>Edit</Button>,
-        <Button onClick={() => reposStore.deleteRepo(repo.id)}>Delete</Button>,
+        isEditing ? <Button onClick={handleSave}>Save</Button> : <Button onClick={() => setIsEditing(true)}>{t('editBtn')}</Button>,
+        <Button onClick={() => reposStore.deleteRepo(repo.id)}>{t('deleteBtn')}</Button>,
       ]}>
       <List.Item.Meta
+        avatar={<Avatar size='large' src={repo.owner.avatar_url} />}
         title={
           isEditing ? (
             <Input value={editedName} onChange={e => setEditedName(e.target.value)} onPressEnter={handleSave} />
@@ -31,7 +34,7 @@ export const RepoItem = observer(({ repo }: { repo: Repo }) => {
         }
         description={repo.description || 'Описание отсутствует'}
       />
-      <div>Stars: {repo.stargazers_count}</div>
+      <div>{repo.stargazers_count} ★</div>
     </List.Item>
   );
 });
