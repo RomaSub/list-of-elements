@@ -6,7 +6,6 @@ const { Option } = Select;
 
 export const LanguageSwitcher = observer(() => {
   const { t, i18n } = useTranslation();
-  const currentLanguage = i18n.language;
 
   const handleSwitch = (lng: string) => {
     localStorage.setItem('lng', lng);
@@ -14,7 +13,7 @@ export const LanguageSwitcher = observer(() => {
   };
 
   return (
-    <Select onChange={handleSwitch} defaultValue={t(currentLanguage)} style={{ marginRight: '5px' }}>
+    <Select onChange={handleSwitch} value={i18n.language} style={{ marginRight: '5px' }}>
       <Option value='ru'>{t('ru')}</Option>
       <Option value='en'>{t('en')}</Option>
     </Select>

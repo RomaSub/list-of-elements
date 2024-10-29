@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import type { Repo } from '../types/github';
 import { Avatar, Button, Input, List } from 'antd';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { reposStore } from '../stores/RepoStore';
 import { useTranslation } from 'react-i18next';
 
 export const RepoItem = observer(({ repo }: { repo: Repo }) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(repo.name);
 
@@ -18,7 +18,11 @@ export const RepoItem = observer(({ repo }: { repo: Repo }) => {
   return (
     <List.Item
       actions={[
-        isEditing ? <Button onClick={handleSave}>Save</Button> : <Button onClick={() => setIsEditing(true)}>{t('editBtn')}</Button>,
+        isEditing ? (
+          <Button onClick={handleSave}>{t('saveBtn')}</Button>
+        ) : (
+          <Button onClick={() => setIsEditing(true)}>{t('editBtn')}</Button>
+        ),
         <Button onClick={() => reposStore.deleteRepo(repo.id)}>{t('deleteBtn')}</Button>,
       ]}>
       <List.Item.Meta
